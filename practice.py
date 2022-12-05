@@ -1,6 +1,6 @@
 import numpy as np
 
 if __name__=='__main__':
-    a=np.zeros([4,5])
-    b=a.reshape([4*5])
-    print(b.shape)
+    a=[[1,2,3],[2,3]]
+    b=[len(n) for n in a]
+    print(b)

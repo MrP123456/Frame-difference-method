@@ -4,6 +4,7 @@ import os
 import cv2
 
 from generate_support_set import save_imgs
+from my_kmeans import k_means
 
 
 def load_imgs(path):
@@ -26,10 +27,6 @@ def img_clus(imgs, num_clus):
     for mid_feature in mid_features:
         imgs.append(mid_feature.reshape([h, w]))
     return imgs
-
-
-def k_means(features, num_clus, max_epochs=999999):
-    print(features.shape)
 
 
 if __name__ == '__main__':
