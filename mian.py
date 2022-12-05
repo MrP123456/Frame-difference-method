@@ -2,30 +2,7 @@ import cv2
 import numpy as np
 import sys
 
-
-def read_video():
-    '''
-    :return: 读入视频
-    '''
-    video_path = 'videos/1.mp4'
-    video = cv2.VideoCapture(video_path)
-    return video
-
-
-def video_to_imgs(video):
-    '''
-    :param video: 视频
-    :return: list[array] 视频转换后的图片列表
-    '''
-    imgs = []
-    ret, frame = video.read()
-    while ret:
-        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-        imgs.append(frame)
-        '''cv2.imshow('img', frame)
-        cv2.waitKey(0)'''
-        ret, frame = video.read()
-    return imgs
+from generate_support_set import read_video,video_to_imgs
 
 
 def frame_difference(imgs):
@@ -99,7 +76,7 @@ def imgs_to_video(imgs):
 
 if __name__ == '__main__':
     print('------read_video------')
-    video = read_video()
+    video = read_video('videos/1.mp4')
     print('-------video_to_imgs------')
     imgs = video_to_imgs(video)
     print('------frame_difference------')
