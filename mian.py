@@ -40,10 +40,11 @@ def frame_difference(imgs):
         diff_img = calcu_diff(img1, img2)
         diff_img = diff_img.astype('uint8')
 
-        diff_img=cv2.resize
+        diff_img = cv2.resize(diff_img, (img1.shape[1], img1.shape[0]))
+        # print(img1.shape,img2.shape,diff_img.shape)
         cat_img = np.concatenate([img1, img2, diff_img], axis=1)
-        cv2.imshow('1', cat_img)
-        cv2.waitKey(0)
+        # cv2.imshow('1', cat_img)
+        # cv2.waitKey(0)
 
         diff_imgs.append(diff_img)
     return diff_imgs
@@ -61,13 +62,13 @@ def calcu_diff(img1, img2):
     h, w = img1.shape[0], img1.shape[1]
     src_img = img2[border:h - border, border:w - border]
     src_img = src_img.reshape([1, src_img.shape[0], src_img.shape[1]])
-    print(src_img.shape)
+    # print(src_img.shape)
     diff_img = None
     left, right, up, down = -border, border, -border, border
     for i in range(left, right + 1):
         for j in range(up, down + 1):
             tmp_img = img1[border + i:h - border + i, border + j:w - border + j]
-            tmp_img=tmp_img.reshape([1,tmp_img.shape[0],tmp_img.shape[1]])
+            tmp_img = tmp_img.reshape([1, tmp_img.shape[0], tmp_img.shape[1]])
             if diff_img is None:
                 diff_img = tmp_img
             else:
@@ -76,7 +77,7 @@ def calcu_diff(img1, img2):
     '''
     做到这里
     '''
-    des_img=np.mean(des_img,axis=0)
+    des_img = np.min(des_img, axis=0)
     return des_img
 
 
@@ -88,7 +89,7 @@ def imgs_to_video(imgs):
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     fps = 60
     size = (imgs[0].shape[0], imgs[0].shape[1])
-    video = cv2.VideoWriter('diff_videos/1.mp4', fourcc, fps, size, 0)
+    video = cv2.VideoWriter('diff_videos/2.mp4', fourcc, fps, size, 0)
     for img in imgs:
         # img=cv2.cvtColor(img)
         img = cv2.resize(img, size)
