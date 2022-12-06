@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 import cv2
 import os
@@ -12,7 +14,7 @@ def read_video(video_path):
     return video
 
 
-def video_to_imgs(video):
+def video_to_imgs(video, to_gray=True):
     '''
     :param video: 视频
     :return: list[array] 视频转换后的图片列表
@@ -20,10 +22,9 @@ def video_to_imgs(video):
     imgs = []
     ret, frame = video.read()
     while ret:
-        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
+        if to_gray:
+            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
         imgs.append(frame)
-        '''cv2.imshow('img', frame)
-        cv2.waitKey(0)'''
         ret, frame = video.read()
     return imgs
 

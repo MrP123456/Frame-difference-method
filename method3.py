@@ -21,7 +21,7 @@ def frame_difference_3(imgs, support_imgs):
         img = imgs[j]
         diff_imgs = None
         for i, support_img in enumerate(support_imgs):
-            diff_img = calcu_diff(img, support_img, 0)
+            diff_img = calcu_diff(img, support_img, 1)
 
             if diff_imgs is None:
                 diff_imgs = np.zeros([m, diff_img.shape[0], diff_img.shape[1]])

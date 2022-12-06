@@ -66,7 +66,7 @@ def imgs_to_video(imgs, path):
     '''
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     fps = 60
-    size = (imgs[0].shape[0], imgs[0].shape[1])
+    size = [imgs[0].shape[1], imgs[0].shape[0]]
     video = cv2.VideoWriter(path, fourcc, fps, size, 0)
     for img in imgs:
         # img=cv2.cvtColor(img)
