@@ -1,77 +1,46 @@
 import cv2
 import numpy as np
 import sys
+from tqdm import tqdm
 
-from generate_support_set import read_video,video_to_imgs
+from generate_support_set import read_video, video_to_imgs
+from method2 import imgs_to_video, calcu_diff
+from generate_standard_support_set import load_imgs
 
 
-def frame_difference(imgs):
+def frame_difference_3(imgs, support_imgs):
     '''
-    :param imgs: list[array] 图片列表
-    :return: list[array] 帧差的图片列表
-    '''
-    diff_imgs = []
-    for i in range(1, len(imgs)):
-        img1, img2 = imgs[i - 1], imgs[i]
-        # diff_img = abs(np.array(img2) - np.array(img1))
-        diff_img = calcu_diff(img1, img2)
-        diff_img = diff_img.astype('uint8')
 
-        diff_img = cv2.resize(diff_img, (img1.shape[1], img1.shape[0]))
+    :param imgs: 输入图片
+    :param support_imgs: 支持图片
+    :return: 输出图片
+    '''
+    out_imgs = []
+    m, h, w = len(support_imgs), imgs[0].shape[0], imgs[0].shape[1]
+    for j in tqdm(range(len(imgs))):
+        img = imgs[j]
+        diff_imgs = None
+        for i, support_img in enumerate(support_imgs):
+            diff_img = calcu_diff(img, support_img, 0)
+
+            if diff_imgs is None:
+                diff_imgs = np.zeros([m, diff_img.shape[0], diff_img.shape[1]])
+            diff_imgs[i] = diff_img
+        # 此行可以根据结果修改
+        # out_img = diff_imgs[0]
+        out_img = np.min(diff_imgs, axis=0)
+
+        out_img = out_img.astype('uint8')
+
+        out_img = cv2.resize(out_img, (img.shape[1], img.shape[0]))
         # print(img1.shape,img2.shape,diff_img.shape)
-        cat_img = np.concatenate([img1, img2, diff_img], axis=1)
-        # cv2.imshow('1', cat_img)
-        # cv2.waitKey(0)
+        '''if j >= 5150:
+            cat_img = np.concatenate([img, support_imgs[0], out_img], axis=1)
+            cv2.imshow('1', cat_img)
+            cv2.waitKey(0)'''
 
-        diff_imgs.append(diff_img)
-    return diff_imgs
-
-
-def calcu_diff(img1, img2):
-    '''
-    :param img1: [h,w]] 灰度图1
-    :param img2: [h,w] 灰度图2
-    :return: [h-border*2,w-border*2] 图1和图2的帧差
-    '''
-    # [368,640] [368.640]]
-    border = 1
-    # 扩大至周围几个像素范围内
-    h, w = img1.shape[0], img1.shape[1]
-    src_img = img2[border:h - border, border:w - border]
-    src_img = src_img.reshape([1, src_img.shape[0], src_img.shape[1]])
-    # print(src_img.shape)
-    diff_img = None
-    left, right, up, down = -border, border, -border, border
-    for i in range(left, right + 1):
-        for j in range(up, down + 1):
-            tmp_img = img1[border + i:h - border + i, border + j:w - border + j]
-            tmp_img = tmp_img.reshape([1, tmp_img.shape[0], tmp_img.shape[1]])
-            if diff_img is None:
-                diff_img = tmp_img
-            else:
-                diff_img = np.concatenate([diff_img, tmp_img], axis=0)
-    des_img = np.abs(src_img - diff_img)
-    '''
-    做到这里
-    '''
-    des_img = np.min(des_img, axis=0)
-    return des_img
-
-
-def imgs_to_video(imgs):
-    '''
-    :param imgs: list[array] 图片列表
-    :return: 转成视频
-    '''
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    fps = 60
-    size = (imgs[0].shape[0], imgs[0].shape[1])
-    video = cv2.VideoWriter('diff_videos/2.mp4', fourcc, fps, size, 0)
-    for img in imgs:
-        # img=cv2.cvtColor(img)
-        img = cv2.resize(img, size)
-        video.write(img)
-    video.release()
+        out_imgs.append(out_img)
+    return out_imgs
 
 
 if __name__ == '__main__':
@@ -79,8 +48,10 @@ if __name__ == '__main__':
     video = read_video('videos/1.mp4')
     print('-------video_to_imgs------')
     imgs = video_to_imgs(video)
+    print('------load_support_imgs------')
+    support_imgs = load_imgs('standard_support_set')
     print('------frame_difference------')
-    target_imgs = frame_difference(imgs)
+    target_imgs = frame_difference_3(imgs, support_imgs)
     print('------imgs_to_video------')
-    imgs_to_video(target_imgs)
+    imgs_to_video(target_imgs, 'diff_videos/3.mp4')
     print('------over------')
