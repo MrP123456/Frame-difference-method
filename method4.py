@@ -18,8 +18,10 @@ def transform(imgs):
         trans_img = img.copy()
 
         kernel = np.ones([3, 3], dtype=np.uint8)
-        trans_img = cv2.erode(trans_img, kernel=kernel, iterations=iterations)
-        trans_img = cv2.dilate(trans_img, kernel=kernel, iterations=iterations)
+        # trans_img=cv2.morphologyEx(trans_img,cv2.MORPH_OPEN,kernel)
+        # trans_img=cv2.morphologyEx(trans_img,cv2.MORPH_OPEN,kernel)
+        # trans_img = cv2.erode(trans_img, kernel=kernel, iterations=iterations)
+        # trans_img = cv2.dilate(trans_img, kernel=kernel, iterations=iterations)
 
         trans_img[trans_img < threshold] = 0
         trans_img[trans_img >= threshold] = 255

@@ -59,7 +59,7 @@ def calcu_diff(img1, img2, border=1):
     return des_img
 
 
-def imgs_to_video(imgs, path):
+def imgs_to_video(imgs, path, is_gray=True):
     '''
     :param imgs: list[array] 图片列表
     :return: 转成视频
@@ -67,7 +67,10 @@ def imgs_to_video(imgs, path):
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     fps = 60
     size = [imgs[0].shape[1], imgs[0].shape[0]]
-    video = cv2.VideoWriter(path, fourcc, fps, size, 0)
+    if is_gray:
+        video = cv2.VideoWriter(path, fourcc, fps, size, 0)
+    else:
+        video = cv2.VideoWriter(path, fourcc, fps, size, 1)
     for img in imgs:
         # img=cv2.cvtColor(img)
         img = cv2.resize(img, size)
