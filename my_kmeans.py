@@ -4,12 +4,11 @@ import sys
 
 def k_means(features, num_clus, max_epoch=999999, min_distance=0.00001):
     '''
-
     :param features: 输入的特征 [n,l]。n：特征数量；l：特征维度
     :param num_clus: 聚类类别数量
     :param max_epoch: 最大迭代次数，终止条件
     :param min_distance: 最小误差，终止条件
-    :return: [num_clus,m] 聚类中心
+    :return: [num_clus,l] 聚类中心
     '''
     mid_features = init_mid_features(features, num_clus)
     for epoch in range(max_epoch):
