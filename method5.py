@@ -41,9 +41,6 @@ def imgs_concat(imgs1, imgs2):
 
 
 if __name__ == '__main__':
-    os.system('python method4.py')
-    print(1)
-
     video = read_video('diff_videos/4.mp4')
     gray_imgs = video_to_imgs(video)
     src_video = read_video('videos/1.mp4')

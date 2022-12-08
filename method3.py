@@ -28,7 +28,12 @@ def frame_difference_3(imgs, support_imgs):
             diff_imgs[i] = diff_img
         # 此行可以根据结果修改
         # out_img = diff_imgs[0]
-        out_img = np.min(diff_imgs, axis=0)
+        sum_diff_imgs = diff_imgs.copy()
+        sum_diff_imgs = sum_diff_imgs.reshape([sum_diff_imgs.shape[0], -1])
+        sum_diff_imgs = np.sum(sum_diff_imgs, axis=1)
+        index_min = np.argmin(sum_diff_imgs)
+        out_img = diff_imgs[index_min]
+        # out_img = np.min(diff_imgs, axis=0)
 
         out_img = out_img.astype('uint8')
 
