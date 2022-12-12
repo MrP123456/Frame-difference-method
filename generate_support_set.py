@@ -30,6 +30,13 @@ def video_to_imgs(video, to_gray=True):
 
 
 def save_imgs(imgs, path):
+    '''
+    在path文件下保存保存imgs
+    :param imgs: img组成的List
+    :param path: 路径
+    :return: None
+    '''
+    os.makedirs(path,exist_ok=True)
     for i in tqdm(range(len(imgs))):
         img = imgs[i]
         img_path = os.path.join(path, str(i) + '.png')
