@@ -2,7 +2,6 @@ import numpy as np
 import cv2
 
 if __name__=='__main__':
-    a=np.random.randn(5)
-    b=np.argmax(a)
-    print(b)
+    a=np.array([1,2,3])
+    b=[0,2,1]
 
